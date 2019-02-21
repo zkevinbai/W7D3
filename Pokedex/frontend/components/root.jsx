@@ -1,5 +1,6 @@
 import React from "react";
 import {Provider} from "react-redux";
+import PokemonIndexContainer from "./pokemon/pokemon_index_container";
 
 class Root extends React.Component{
 
@@ -11,10 +12,10 @@ class Root extends React.Component{
   render(){
     return (
       <Provider store={this.props.store} >
-        <div> </div>
+        <PokemonIndexContainer/>
       </Provider>
     )
   }
 }
 
-export default Roo
+export default Root
