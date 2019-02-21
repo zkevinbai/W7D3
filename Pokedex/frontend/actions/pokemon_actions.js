@@ -1,5 +1,4 @@
 import * as ApiUtil from '../util/api_utils';
-// import fetchAllPokemon from '../util/api_utils';
 
 export const RECEIVE_ALL_POKEMON = "RECEIVE_ALL_POKEMON";
 
@@ -17,4 +16,4 @@ export const requestAllPokemon = () => (dispatch) => (
   ApiUtil.fetchAllPokemon()
   // fetchAllPokemon()
   .then(pokemon => dispatch(receiveAllPokemon(pokemon)))
-) 
+)
