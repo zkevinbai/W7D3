@@ -90,13 +90,17 @@
 /*!*********************************************!*\
   !*** ./frontend/actions/pokemon_actions.js ***!
   \*********************************************/
-/*! exports provided: RECEIVE_ALL_POKEMON, receiveAllPokemon */
+/*! exports provided: RECEIVE_ALL_POKEMON, receiveAllPokemon, requestAllPokemon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_ALL_POKEMON", function() { return RECEIVE_ALL_POKEMON; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveAllPokemon", function() { return receiveAllPokemon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "requestAllPokemon", function() { return requestAllPokemon; });
+/* harmony import */ var _util_api_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/api_utils */ "./frontend/util/api_utils.js");
+ // import fetchAllPokemon from '../util/api_utils';
+
 var RECEIVE_ALL_POKEMON = "RECEIVE_ALL_POKEMON"; // Normal Action Creators
 
 var receiveAllPokemon = function receiveAllPokemon(pokemon) {
@@ -105,6 +109,42 @@ var receiveAllPokemon = function receiveAllPokemon(pokemon) {
     pokemon: pokemon
   };
 }; // Thunk Action Creators
+
+var requestAllPokemon = function requestAllPokemon() {
+  return function (dispatch) {
+    return _util_api_utils__WEBPACK_IMPORTED_MODULE_0__["fetchAllPokemon"]() // fetchAllPokemon()
+    .then(function (pokemon) {
+      return dispatch(receiveAllPokemon(pokemon));
+    });
+  };
+};
+
+/***/ }),
+
+/***/ "./frontend/middleware/thunk.js":
+/*!**************************************!*\
+  !*** ./frontend/middleware/thunk.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var thunk = function thunk(_ref) {
+  var dispatch = _ref.dispatch,
+      getState = _ref.getState;
+  return function (next) {
+    return function (action) {
+      if (typeof action === "function") {
+        return action(dispatch, getState);
+      }
+
+      return next(action);
+    };
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (thunk);
 
 /***/ }),
 
@@ -138,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
   window.receiveAllPokemon = _actions_pokemon_actions__WEBPACK_IMPORTED_MODULE_2__["receiveAllPokemon"];
   window.RECEIVE_ALL_POKEMON = _actions_pokemon_actions__WEBPACK_IMPORTED_MODULE_2__["RECEIVE_ALL_POKEMON"];
   window.fetchAllPokemon = _util_api_utils__WEBPACK_IMPORTED_MODULE_3__["default"];
+  window.requestAllPokemon = _actions_pokemon_actions__WEBPACK_IMPORTED_MODULE_2__["requestAllPokemon"];
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Pokedex"), rootEL);
 });
 
@@ -223,14 +264,16 @@ var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_1__["combineReducers"])(
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers_root_reducer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../reducers/root_reducer */ "./frontend/reducers/root_reducer.js");
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-/* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux-logger */ "./node_modules/redux-logger/dist/redux-logger.js");
-/* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(redux_logger__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! redux-logger */ "./node_modules/redux-logger/dist/redux-logger.js");
+/* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(redux_logger__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _middleware_thunk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../middleware/thunk */ "./frontend/middleware/thunk.js");
+
 
 
 
 
 var configureStore = function configureStore() {
-  return Object(redux__WEBPACK_IMPORTED_MODULE_1__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_0__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_1__["applyMiddleware"])(redux_logger__WEBPACK_IMPORTED_MODULE_3___default.a));
+  return Object(redux__WEBPACK_IMPORTED_MODULE_1__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_0__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_1__["applyMiddleware"])(_middleware_thunk__WEBPACK_IMPORTED_MODULE_3__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (configureStore);
@@ -241,19 +284,18 @@ var configureStore = function configureStore() {
 /*!************************************!*\
   !*** ./frontend/util/api_utils.js ***!
   \************************************/
-/*! exports provided: default */
+/*! exports provided: fetchAllPokemon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAllPokemon", function() { return fetchAllPokemon; });
 var fetchAllPokemon = function fetchAllPokemon() {
   return $.ajax({
     method: "GET",
     url: "http://localhost:3000/api/pokemon"
   });
 };
-
-/* harmony default export */ __webpack_exports__["default"] = (fetchAllPokemon);
 
 /***/ }),
 
